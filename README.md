@@ -1,1 +1,1 @@
-# Pantry Inventory App
+# Food Inventory App
