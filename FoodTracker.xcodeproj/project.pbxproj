@@ -18,6 +18,7 @@
 		936D9F9B276AEEE8005488D8 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F9A276AEEE8005488D8 /* String.swift */; };
 		936D9F9D276AFD88005488D8 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F9C276AFD88005488D8 /* SearchView.swift */; };
 		936D9F9F276B1497005488D8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F9E276B1497005488D8 /* SettingsView.swift */; };
+		936F2C61276D2BBD00703928 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936F2C60276D2BBD00703928 /* NotificationManager.swift */; };
 		93AD4E3027669A30007C2F02 /* FoodTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AD4E2F27669A30007C2F02 /* FoodTrackerApp.swift */; };
 		93AD4E3227669A30007C2F02 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93AD4E3127669A30007C2F02 /* ContentView.swift */; };
 		93AD4E3427669A31007C2F02 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93AD4E3327669A31007C2F02 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		936D9F9A276AEEE8005488D8 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		936D9F9C276AFD88005488D8 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		936D9F9E276B1497005488D8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		936F2C60276D2BBD00703928 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		93AD4E2C27669A30007C2F02 /* Food Box.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Food Box.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93AD4E2F27669A30007C2F02 /* FoodTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodTrackerApp.swift; sourceTree = "<group>"; };
 		93AD4E3127669A30007C2F02 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				93AD4E402766A947007C2F02 /* Extensions */,
 				93AD4E3327669A31007C2F02 /* Assets.xcassets */,
 				93AD4E3527669A31007C2F02 /* Preview Content */,
+				936F2C60276D2BBD00703928 /* NotificationManager.swift */,
 			);
 			path = FoodTracker;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				93AD4E3027669A30007C2F02 /* FoodTrackerApp.swift in Sources */,
 				936D9F93276A8FCC005488D8 /* AddItemView.swift in Sources */,
 				936D9F9D276AFD88005488D8 /* SearchView.swift in Sources */,
+				936F2C61276D2BBD00703928 /* NotificationManager.swift in Sources */,
 				936D9F9B276AEEE8005488D8 /* String.swift in Sources */,
 				93D809AA27694913005A0D56 /* PreviewProvider.swift in Sources */,
 				93D809A82769255D005A0D56 /* IconButtonView.swift in Sources */,

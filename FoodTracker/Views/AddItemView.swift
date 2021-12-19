@@ -13,7 +13,7 @@ struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     
     @State var title: String = ""
-    @State var quantity: String = ""
+    @State var quantity: String = "1"
     @State var note: String = ""
     @State var expirationDate: Date = Date()
     @State var voidExpiration: Bool = false

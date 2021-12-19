@@ -88,6 +88,7 @@ class ItemViewModel: ObservableObject {
     
     func addItem(title: String, quantity: Double, note: String, expirationDate: Date?) {
         let item = Item(title: title, quantity: quantity, note: note, expirationDate: expirationDate)
+        NotificationManager().scheduleNotification(for: item, with: threhold)
         save(input: item)
     }
     
@@ -106,7 +107,9 @@ class ItemViewModel: ObservableObject {
     
     func updateItem(item: Item, title: String, quantity: Double, note: String, expirationDate: Date?) {
         if let entity = CoreDataManager.shared.getItem(by: item.objectID!) {
-            CoreDataManager.shared.update(entity: entity, item: Item(id: item.id, title: title, quantity: quantity, note: note, expirationDate: expirationDate))
+            let newItem = Item(id: item.id, title: title, quantity: quantity, note: note, expirationDate: expirationDate)
+            CoreDataManager.shared.update(entity: entity, item: newItem)
+            NotificationManager().updateNotifications(for: newItem, with: threhold)
         }
         reload()
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct SettingsView: View {
     
@@ -19,6 +20,7 @@ struct SettingsView: View {
     @State var resetAlert = false
     @State var showImagePicker = false
     @Binding var image: UIImage
+    @State var notifications = false
     
     enum Theme: String, CaseIterable, Identifiable {
         case light
@@ -30,6 +32,14 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                Section("Appearance") {
+                    Picker("Theme", selection: $systemTheme, content: {
+                        ForEach(Theme.allCases, content: { theme in
+                            Text(theme.rawValue.capitalized)
+                        })
+                    })
+                }
+                
                 Section {
                     VStack {
                         Image(uiImage: image)
@@ -55,12 +65,35 @@ struct SettingsView: View {
                     Text("Changes the background of the main screen.")
                 }
                 
-                Section("Appearance") {
-                    Picker("Theme", selection: $systemTheme, content: {
-                        ForEach(Theme.allCases, content: { theme in
-                            Text(theme.rawValue.capitalized)
-                        })
-                    })
+                Section {
+                    Toggle("Notifications", isOn: $notifications)
+                        .onChange(of: notifications) { newValue in
+                            if newValue {
+                                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+                                    if success {
+                                        notifications = true
+                                    } else {
+                                        notifications = false
+                                    }
+                                }
+                                NotificationManager().scheduleNotifications(for: vm.allItems, with: vm.threhold)
+                                UNUserNotificationCenter.current().getNotificationSettings { settings in
+                                    if settings.authorizationStatus == .authorized {
+                                        notifications = true
+                                    } else {
+                                        notifications = false
+                                    }
+                                }
+                            } else {
+                                NotificationManager().removeAllNotifications()
+                                print("NOTIFICATIONS CLEARED!")
+                            }
+                        }
+                } header: {
+                    Text("Notifications")
+                } footer: {
+                    Text("Get notifications when items expire and are within the threshold. Enable notifications in your settings if you cannot turn on notifications.")
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
                 Section {
@@ -74,7 +107,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Threshold")
                 } footer: {
-                    Text("When items should be moved to \"Expiring Soon\"")
+                    Text("When items should be moved to \"Expiring Soon\".")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
@@ -117,9 +150,12 @@ struct SettingsView: View {
             })
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        vm.updateThreshold(to: currentThreshold)
-                        threshold = currentThreshold
+                    Button("Save") {
+                        if currentThreshold != vm.threhold {
+                            vm.updateThreshold(to: currentThreshold)
+                            threshold = currentThreshold
+                            NotificationManager().scheduleNotifications(for: vm.allItems, with: currentThreshold)
+                        }
                         dismiss()
                     }
                 }
