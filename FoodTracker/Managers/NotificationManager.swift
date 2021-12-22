@@ -25,7 +25,6 @@ class NotificationManager {
             if settings.authorizationStatus == .authorized {
                 for item in multipleItems  {
                     self.scheduleNotification(for: item, with: threshold)
-                    print("Scheduled \(item.title)")
                 }
             } else {
                 self.requestAuthorization()
@@ -36,6 +35,7 @@ class NotificationManager {
     }
     
     func scheduleNotification(for item: Item, with threshold: Int) {
+        // TODO: Check if expiration/expiring soon has already passed before scheduling
         if let expiration = item.expirationDate, let expiringSoonDate = Calendar.current.date(byAdding: .day, value: -threshold, to: expiration) {
             // Expiring Soon Notification
             let expiringNotification = UNMutableNotificationContent()
@@ -59,6 +59,7 @@ class NotificationManager {
             
             UNUserNotificationCenter.current().add(expiringRequest)
             UNUserNotificationCenter.current().add(expiredRequest)
+            print("Scheduled \(item.title)")
         }
     }
     
@@ -66,13 +67,13 @@ class NotificationManager {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 
-    func removeNotification(withIdentifiers identifier: String) {
+    func removeNotification(withIdentifier identifier: String) {
         let identifiers = [identifier + "Expiring", identifier + "Expired"]
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
     }
     
     func updateNotifications(for item: Item, with threshold: Int) {
-        removeNotification(withIdentifiers: item.id.uuidString)
+        removeNotification(withIdentifier: item.id.uuidString)
         scheduleNotification(for: item, with: threshold)
     }
 }

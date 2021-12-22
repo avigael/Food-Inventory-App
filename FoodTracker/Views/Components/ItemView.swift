@@ -57,6 +57,13 @@ struct ItemView_Previews: PreviewProvider {
 }
 
 extension ItemView {
+    /// Converts  an Optional Date into a String
+    /// ```
+    /// Converts Date(...) to "11/22/33"
+    /// Converts nil to "Does not expire"
+    /// ```
+    /// - Parameter date: Date Struct. A specific point in time
+    /// - Returns: Date as a String
     func formatDate(_ date: Date?) -> String {
         if let date = date {
             let formatter = DateFormatter()

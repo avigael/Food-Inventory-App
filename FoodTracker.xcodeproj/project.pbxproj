@@ -83,6 +83,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		938003CB2773938700012D20 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				936F2C60276D2BBD00703928 /* NotificationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		93AD4E2327669A2F007C2F02 = {
 			isa = PBXGroup;
 			children = (
@@ -103,14 +111,14 @@
 			isa = PBXGroup;
 			children = (
 				93AD4E2F27669A30007C2F02 /* FoodTrackerApp.swift */,
+				938003CB2773938700012D20 /* Managers */,
 				93D809A327692528005A0D56 /* Views */,
 				936D9F8F276A883E005488D8 /* ViewModels */,
 				93AD4E3F2766A942007C2F02 /* Models */,
 				936D9F89276A7956005488D8 /* CoreData */,
 				93AD4E402766A947007C2F02 /* Extensions */,
-				93AD4E3327669A31007C2F02 /* Assets.xcassets */,
 				93AD4E3527669A31007C2F02 /* Preview Content */,
-				936F2C60276D2BBD00703928 /* NotificationManager.swift */,
+				93AD4E3327669A31007C2F02 /* Assets.xcassets */,
 			);
 			path = FoodTracker;
 			sourceTree = "<group>";
@@ -152,7 +160,6 @@
 				936D9F9C276AFD88005488D8 /* SearchView.swift */,
 				936D9F9E276B1497005488D8 /* SettingsView.swift */,
 				93D809A42769252E005A0D56 /* Components */,
-				93043C09276BF8CC00A45449 /* PhotoPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -162,6 +169,7 @@
 			children = (
 				93D809A52769254B005A0D56 /* ItemView.swift */,
 				93D809A72769255D005A0D56 /* IconButtonView.swift */,
+				93043C09276BF8CC00A45449 /* PhotoPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";

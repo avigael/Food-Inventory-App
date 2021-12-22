@@ -68,13 +68,18 @@ class ItemViewModel: ObservableObject {
             .sorted { $0.expirationDate! < $1.expirationDate! }
     }
     
+    /// Re-fetches items from CoreData and adds them to allItems
     func reload() {
+        // Gets saved items from CoreDate
         allItems = CoreDataManager.shared.fetch().map({ item in
             Item(id: item.id ?? UUID(), title: item.title ?? "Title", quantity: item.quantity, note: item.note ?? "", expirationDate: item.expirationDate, objectID: item.objectID)
         })
+        // Sorts items by expiration date
         allItems.sort { $0.expirationDate ?? Date(timeIntervalSince1970: 0) > $1.expirationDate ?? Date(timeIntervalSince1970: 0) }
     }
     
+    /// Saves an individual item to CoreData
+    /// - Parameter input: Item to be saved
     func save(input: Item) {
         let item = ItemEntity(context: CoreDataManager.shared.viewContext)
         item.id = input.id
@@ -86,34 +91,58 @@ class ItemViewModel: ObservableObject {
         reload()
     }
     
+    /// Creates a new item, creates notifications for item, and saves to CoreData
+    /// - Parameters:
+    ///   - title: Title of item
+    ///   - quantity: Quanity of itme
+    ///   - note: Note for item
+    ///   - expirationDate: Expiration date for item
     func addItem(title: String, quantity: Double, note: String, expirationDate: Date?) {
         let item = Item(title: title, quantity: quantity, note: note, expirationDate: expirationDate)
         NotificationManager().scheduleNotification(for: item, with: threhold)
         save(input: item)
     }
     
+    /// Removes notifications for item and removes from CoreData
+    /// - Parameter item: Item to remove
     func deleteItem(item: Item) {
+        NotificationManager().removeNotification(withIdentifier: item.id.uuidString)
         if let entity = CoreDataManager.shared.getItem(by: item.objectID!) {
             CoreDataManager.shared.delete(entity: entity)
         }
         reload()
     }
     
+    /// Removes multiple items and their notifications
+    /// - Parameter items: Items to remove
     func deleteItems(items: [Item]) {
         for item in items {
             deleteItem(item: item)
         }
     }
     
+    /// Changes an existing items information in CoreData
+    /// - Parameters:
+    ///   - item: Old item to replace
+    ///   - title: New title
+    ///   - quantity: New quantity
+    ///   - note: New note
+    ///   - expirationDate: New expiration date
     func updateItem(item: Item, title: String, quantity: Double, note: String, expirationDate: Date?) {
+        // Check if items exists in CoreData
         if let entity = CoreDataManager.shared.getItem(by: item.objectID!) {
+            // Create new item with old id
             let newItem = Item(id: item.id, title: title, quantity: quantity, note: note, expirationDate: expirationDate)
+            // Update item in CoreData
             CoreDataManager.shared.update(entity: entity, item: newItem)
+            // Update notification
             NotificationManager().updateNotifications(for: newItem, with: threhold)
         }
         reload()
     }
     
+    /// Updates threshold in ViewModel
+    /// - Parameter threshold: new value for threshold
     func updateThreshold(to threshold: Int) {
         self.threhold = threshold
     }

@@ -18,6 +18,7 @@ class CoreDataManager {
         container.viewContext
     }
     
+    /// Saves context
     func save() {
         do {
             try viewContext.save()
@@ -28,6 +29,8 @@ class CoreDataManager {
         
     }
     
+    /// Gets items from context
+    /// - Returns: An array of ItemEntities
     func fetch() -> [ItemEntity] {
         let request: NSFetchRequest<ItemEntity> = ItemEntity.fetchRequest()
         do {
@@ -38,11 +41,17 @@ class CoreDataManager {
         }
     }
     
+    /// Deletes an ItemEntity from context
+    /// - Parameter entity: ItemEntity
     func delete(entity: ItemEntity) {
         viewContext.delete(entity)
         save()
     }
     
+    /// Updates an existings item
+    /// - Parameters:
+    ///   - entity: ItemEntity to Update
+    ///   - item: Item to update with
     func update(entity: ItemEntity, item: Item) {
         entity.id = item.id
         entity.title = item.title
@@ -52,6 +61,9 @@ class CoreDataManager {
         save()
     }
     
+    /// Gets the ItemEntity for an Item with a NSManagedObjectID
+    /// - Parameter id: ObjectID of Item
+    /// - Returns: ItemEntity
     func getItem(by id: NSManagedObjectID) -> ItemEntity? {
         do {
             return try viewContext.existingObject(with: id) as? ItemEntity

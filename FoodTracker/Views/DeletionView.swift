@@ -11,21 +11,24 @@ struct DeletionView: View {
     
     @EnvironmentObject var vm: ItemViewModel
     
+    @State var showingAlert: Bool = false
+    
     @State var selectedItems: [Item] = []
     @State var selectToggle = false
     
-    @State var showingAlert: Bool = false
-    
     var body: some View {
         ScrollView {
+            // Tells user no items exist
             if vm.allItems.isEmpty {
                 Text("You do not have any items")
                     .font(.callout)
                     .padding()
             }
+            // Conten
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
                 ForEach(vm.allItems) { item in
                     ItemView(item: item)
+                    // Tap to individually select item
                         .onTapGesture {
                             selectItem(item: item)
                         }
@@ -38,6 +41,7 @@ struct DeletionView: View {
             .padding()
         }
         .toolbar {
+            // Select/Deselect Button
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     if selectToggle {
@@ -52,6 +56,7 @@ struct DeletionView: View {
                 .disabled(vm.allItems.isEmpty)
                 
             }
+            // Delete Button
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(role: .destructive) {
                     showingAlert = true
@@ -83,6 +88,8 @@ struct DeletionView_Previews: PreviewProvider {
 }
 
 extension DeletionView {
+    /// Adds item if it has been not been selected and unselects item if it has been selected.
+    /// - Parameter item: Item to select/deselect
     func selectItem(item: Item) {
         if let index = selectedItems.firstIndex(where: {$0.id == item.id}) {
             selectedItems.remove(at: index)
@@ -91,14 +98,19 @@ extension DeletionView {
         }
     }
     
+    /// Checks if an items has been selected
+    /// - Parameter item: Item that will be checked
+    /// - Returns: Returns true item has been selected
     func isSelected(item: Item) -> Bool {
         return selectedItems.contains(where: {$0.id == item.id})
     }
     
+    /// Adds all items to selections
     func selectAll() {
         selectedItems = vm.allItems
     }
     
+    /// Remove all items from selections
     func deselectAll() {
         selectedItems = []
     }

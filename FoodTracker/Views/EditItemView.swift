@@ -38,9 +38,11 @@ struct EditItemView: View {
     var body: some View {
         NavigationView {
             List {
+                // Edit title
                 Section("Title (required)") {
                     TextField("Item Name", text: $title)
                 }
+                // Edit expiration date
                 Section {
                     if !voidExpiration {
                         DatePicker("Expiration Date", selection: $expirationDate, displayedComponents: [.date])
@@ -51,7 +53,7 @@ struct EditItemView: View {
                 } footer: {
                     Text("Enabling no expiration date means this item does not expire.")
                 }
-                
+                // Edit quantity
                 Section {
                     TextField("Ex. 0.5", text: $quantity)
                         .keyboardType(.decimalPad)
@@ -61,11 +63,12 @@ struct EditItemView: View {
                 } footer: {
                     Text("Only quantities of 0.1 or larger are valid.")
                 }
-                
+                // Edit Note
                 Section("Notes") {
                     TextEditor(text: $note)
                         .frame(height: 100)
                 }
+                // Remove Item
                 Section {
                     Button(role: .destructive) {
                         showingAlert = true
@@ -86,6 +89,7 @@ struct EditItemView: View {
             .listStyle(.insetGrouped)
             .navigationTitle("Edit Item")
             .toolbar {
+                // Update Item Button
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         var expiration: Date? = expirationDate
@@ -102,6 +106,7 @@ struct EditItemView: View {
                     }
                     .disabled(title.isEmpty || !checkDoubleString(quantity))
                 }
+                // Cancel Button
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         dismiss()
@@ -119,6 +124,9 @@ struct EditItemView_Previews: PreviewProvider {
 }
 
 extension EditItemView {
+    /// Checks if quantity is a valid input
+    /// - Parameter double: String which can convert to a double
+    /// - Returns: If string cannot convert to a double or is less than 0.1 return false
     func checkDoubleString(_ double: String) -> Bool {
         if let value = double.asDouble(), value >= 0.1 {
             return true

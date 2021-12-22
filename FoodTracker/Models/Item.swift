@@ -25,6 +25,8 @@ struct Item: Identifiable {
         self.objectID = objectID
     }
     
+    /// Gets the amount of days left before an item expires.
+    /// - Returns: The amount of days between expiration and today
     func daysUntilExpired() -> Int? {
         if let date = expirationDate {
             let today = Date()

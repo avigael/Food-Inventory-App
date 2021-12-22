@@ -9,10 +9,10 @@ import SwiftUI
 
 @main
 struct FoodTrackerApp: App {
-    @AppStorage("systemTheme") private var systemTheme = SettingsView.Theme.system
     
     @StateObject var itemViewModel = ItemViewModel()
-    
+    @AppStorage("systemTheme") private var systemTheme = SettingsView.Theme.system
+        
     var body: some Scene {
         WindowGroup {
             NavigationView {
@@ -24,6 +24,9 @@ struct FoodTrackerApp: App {
         }
     }
     
+    /// Converts the Theme Enum to a ColorScheme
+    /// - Parameter theme: Enum which represents Light, Dark, and System color themes
+    /// - Returns: A color scheme
     func colorScheme(_ theme: SettingsView.Theme) -> ColorScheme? {
         switch theme {
         case .light:
@@ -31,7 +34,7 @@ struct FoodTrackerApp: App {
         case .dark:
             return ColorScheme.dark
         default:
-            return .none
+            return nil
         }
     }
 }

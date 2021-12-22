@@ -16,12 +16,14 @@ struct SettingsView: View {
     @AppStorage("threshold") private var threshold = 5
     @AppStorage("systemTheme") private var systemTheme = Theme.system
     
+    @Binding var image: UIImage
+    @State var showImagePicker = false
     @State var currentThreshold: Int
     @State var resetAlert = false
-    @State var showImagePicker = false
-    @Binding var image: UIImage
+    // TODO: Save notification state
     @State var notifications = false
     
+    // List of themes for Picker in settings
     enum Theme: String, CaseIterable, Identifiable {
         case light
         case dark
@@ -32,6 +34,7 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             List {
+                // Theme Picker
                 Section("Appearance") {
                     Picker("Theme", selection: $systemTheme, content: {
                         ForEach(Theme.allCases, content: { theme in
@@ -39,7 +42,7 @@ struct SettingsView: View {
                         })
                     })
                 }
-                
+                // Background Image Picker
                 Section {
                     VStack {
                         Image(uiImage: image)
@@ -64,27 +67,25 @@ struct SettingsView: View {
                 } footer: {
                     Text("Changes the background of the main screen.")
                 }
-                
+                // Notifications Toggle
                 Section {
                     Toggle("Notifications", isOn: $notifications)
                         .onChange(of: notifications) { newValue in
                             if newValue {
+                                // Ask for permission
                                 UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                                     if success {
+                                        // Changes toggle to true
                                         notifications = true
                                     } else {
+                                        // If user denies notifications will revert to false
                                         notifications = false
                                     }
                                 }
+                                // Schedule notifications for all items
                                 NotificationManager().scheduleNotifications(for: vm.allItems, with: vm.threhold)
-                                UNUserNotificationCenter.current().getNotificationSettings { settings in
-                                    if settings.authorizationStatus == .authorized {
-                                        notifications = true
-                                    } else {
-                                        notifications = false
-                                    }
-                                }
                             } else {
+                                // Removes all notifications when toggled off
                                 NotificationManager().removeAllNotifications()
                                 print("NOTIFICATIONS CLEARED!")
                             }
@@ -95,7 +96,7 @@ struct SettingsView: View {
                     Text("Get notifications when items expire and are within the threshold. Enable notifications in your settings if you cannot turn on notifications.")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                
+                // Edit Threshold
                 Section {
                     Stepper("\(currentThreshold) " + (currentThreshold == 1 ? "Day" : "Days")) {
                         currentThreshold += 1
@@ -110,7 +111,7 @@ struct SettingsView: View {
                     Text("When items should be moved to \"Expiring Soon\".")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                
+                // About/Info
                 Section("About") {
                     HStack {
                         Text("Version")
@@ -123,9 +124,9 @@ struct SettingsView: View {
                         Text("info@gael.cc")
                     }
                 }
-                
+                // Reset Settings
                 Section {
-                    Button {
+                    Button(role: .destructive) {
                         resetAlert = true
                     } label: {
                         Text("Reset Settings")
@@ -149,6 +150,7 @@ struct SettingsView: View {
                 PhotoPicker(backgroundImage: $image)
             })
             .toolbar {
+                // Save Button
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
                         if currentThreshold != vm.threhold {
@@ -159,6 +161,7 @@ struct SettingsView: View {
                         dismiss()
                     }
                 }
+                // Cancel Button
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
                         dismiss()
@@ -172,12 +175,14 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(currentThreshold: 5, image: sample.$image)
+        SettingsView(image: sample.$image, currentThreshold: 5)
             .environmentObject(sample.vm)
     }
 }
 
 extension SettingsView {
+    /// Gets the current selected theme as a ColorScheme
+    /// - Returns: User selected ColorScheme
     func getColor() -> ColorScheme? {
         switch systemTheme {
         case .light:

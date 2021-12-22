@@ -10,20 +10,17 @@ import SwiftUI
 struct ContentView: View {
     
     @EnvironmentObject var vm: ItemViewModel
-    @State var image: UIImage = UIImage(imageLiteralResourceName: "Dark-Image")
     
     @State var showSettings: Bool = false
     @State var showSearch: Bool = false
     @State var showRemove: Bool = false
     @State var showCreate: Bool = false
-    
     @State var editingItem: Item?
+
+    @State var image: UIImage = UIImage(imageLiteralResourceName: "Dark-Image")
     
     var body: some View {
         HStack {
-            // Background
-            
-            // Content
             ScrollView(.vertical, showsIndicators: false) {
                 toolbar
                     .padding(.horizontal)
@@ -34,7 +31,7 @@ struct ContentView: View {
         }
         .background(backgroundImage)
         .sheet(isPresented: $showSettings) {
-            SettingsView(currentThreshold: vm.threhold, image: $image)
+            SettingsView(image: $image, currentThreshold: vm.threhold)
         }
         .sheet(item: $editingItem) { item in
             EditItemView(item: item)
@@ -53,6 +50,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 extension ContentView {
+    
     private var backgroundImage: some View {
         Image(uiImage: image)
             .resizable()
@@ -62,24 +60,24 @@ extension ContentView {
     
     private var toolbar: some View {
         HStack {
+            // Settings
             IconButtonView(action: $showSettings, systemName: "gearshape")
-            
+            // Search
             NavigationLink(isActive: $showSearch) {
                 SearchView(searchText: $vm.searchText)
                     .navigationTitle("Search Items")
             } label: {
                 IconButtonView(action: $showSearch, systemName: "magnifyingglass")
             }
-            
             Spacer()
-            
+            // Delete Items
             NavigationLink(isActive: $showRemove) {
                 DeletionView()
                     .navigationTitle("Delete Items")
             } label: {
                 IconButtonView(action: $showRemove, systemName: "minus")
             }
-            
+            // Create Item
             IconButtonView(action: $showCreate, systemName: "plus")
         }
         .padding(.top)
@@ -87,6 +85,7 @@ extension ContentView {
     
     private var expiringSoonItems: some View {
         VStack {
+            // Title
             if !vm.expiringSoon.isEmpty {
                 HStack {
                     Text("Expiring Soon")
@@ -97,6 +96,7 @@ extension ContentView {
                 }
                 .padding(.horizontal)
             }
+            // Content
             ScrollView(.horizontal, showsIndicators: false) {
                 ZStack {
                     HStack {
@@ -118,6 +118,7 @@ extension ContentView {
     
     private var allItems: some View {
         VStack {
+            // Title
             if !vm.allItems.isEmpty {
                 HStack {
                     Text("All Items")
@@ -127,6 +128,7 @@ extension ContentView {
                     Spacer()
                 }
             }
+            // Content
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
                 ForEach(vm.allItems) { item in
                     ItemView(item: item)

@@ -16,6 +16,7 @@ struct SearchView: View {
     var body: some View {
         ScrollView {
             VStack {
+                // Search field
                 TextField("Ex. Milk", text: $searchText)
                     .submitLabel(.search)
                     .padding()
@@ -23,11 +24,13 @@ struct SearchView: View {
             .frame(height: 50)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
             .padding(.vertical)
+            // Tells user no items exist
             if vm.searchResults.isEmpty {
                 Text("No results")
                     .font(.callout)
                     .padding()
             }
+            // Content
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
                 ForEach(vm.searchResults) { item in
                     ItemView(item: item)
@@ -42,6 +45,7 @@ struct SearchView: View {
             EditItemView(item: item)
         }
         .onDisappear {
+            // Clears text when user leaves screen
             searchText = ""
         }
     }
