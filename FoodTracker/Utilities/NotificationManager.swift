@@ -7,8 +7,11 @@
 
 import Foundation
 import UserNotifications
+import SwiftUI
 
 class NotificationManager {
+    @AppStorage("allowNotifications") private var allowNotifications = false
+    
     static let instance = NotificationManager()
     
     func requestAuthorization() {
@@ -35,8 +38,7 @@ class NotificationManager {
     }
     
     func scheduleNotification(for item: Item, with threshold: Int) {
-        // TODO: Check if expiration/expiring soon has already passed before scheduling
-        if let expiration = item.expirationDate, let expiringSoonDate = Calendar.current.date(byAdding: .day, value: -threshold, to: expiration) {
+        if let expiration = item.expirationDate, let expiringSoonDate = Calendar.current.date(byAdding: .day, value: -threshold, to: expiration), item.daysUntilExpired()! > 0, allowNotifications {
             // Expiring Soon Notification
             let expiringNotification = UNMutableNotificationContent()
             expiringNotification.title = "\(item.title) Expiring Soon!"

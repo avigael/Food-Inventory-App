@@ -15,9 +15,11 @@ class ItemViewModel: ObservableObject {
     @Published var expiringSoon: [Item] = []
     @Published var searchText: String = ""
     @Published var searchResults: [Item] = []
+    @Published var backgroundImage: UIImage = UIImage(imageLiteralResourceName: "Dark-Image")
     @Published var threhold: Int
     
     private var cancellables = Set<AnyCancellable>()
+    private let imageManager = ImageManager.instance
     
     init() {
         @AppStorage("threshold") var threshold = 5
@@ -32,7 +34,14 @@ class ItemViewModel: ObservableObject {
         addSubscribers()
     }
     
-    func addSubscribers() {
+    /// Gets the background image saved in FileManager
+    private func getBackgroundImage() {
+        if let image = imageManager.loadImage(imageName: "image", folderName: "background") {
+            self.backgroundImage = image
+        }
+    }
+    
+    private func addSubscribers() {
         // Creates an [Item] of Search Results from Search Text
         $searchText
             .combineLatest($allItems)
@@ -52,6 +61,11 @@ class ItemViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    /// Searches Items' Title and Note for text matching search text
+    /// - Parameters:
+    ///   - text: Search term
+    ///   - items: Items to search thru
+    /// - Returns: Array of items matching search term
     private func filterItemsSearch(text: String, items: [Item]) -> [Item] {
         guard !text.isEmpty else {
             return items
@@ -62,6 +76,11 @@ class ItemViewModel: ObservableObject {
         }
     }
     
+    /// Filters items into expiring soon
+    /// - Parameters:
+    ///   - items: Items to filter
+    ///   - threhold: Threshold to check for (Days)
+    /// - Returns: An array of items who expire in threshold or fewer days
     private func filterExpiringItems(items: [Item], threhold: Int) -> [Item] {
         return items
             .filter { $0.daysUntilExpired() ?? threhold + 1 <= threhold }
@@ -145,6 +164,13 @@ class ItemViewModel: ObservableObject {
     /// - Parameter threshold: new value for threshold
     func updateThreshold(to threshold: Int) {
         self.threhold = threshold
+    }
+    
+    /// Sets backgrond image to image and saves to FileManager
+    /// - Parameter image: Image to set and save
+    func saveBackgroundImage(image: UIImage) {
+        self.backgroundImage = image
+        self.imageManager.saveImage(image: image, imageName: "image", folderName: "background")
     }
     
 }

@@ -64,7 +64,7 @@ extension ItemView {
     /// ```
     /// - Parameter date: Date Struct. A specific point in time
     /// - Returns: Date as a String
-    func formatDate(_ date: Date?) -> String {
+    private func formatDate(_ date: Date?) -> String {
         if let date = date {
             let formatter = DateFormatter()
             formatter.dateStyle = .medium

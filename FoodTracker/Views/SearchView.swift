@@ -10,35 +10,14 @@ import SwiftUI
 struct SearchView: View {
     
     @EnvironmentObject var vm: ItemViewModel
+    
     @Binding var searchText: String
-    @State var editingItem: Item?
+    @State private var editingItem: Item?
     
     var body: some View {
         ScrollView {
-            VStack {
-                // Search field
-                TextField("Ex. Milk", text: $searchText)
-                    .submitLabel(.search)
-                    .padding()
-            }
-            .frame(height: 50)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
-            .padding(.vertical)
-            // Tells user no items exist
-            if vm.searchResults.isEmpty {
-                Text("No results")
-                    .font(.callout)
-                    .padding()
-            }
-            // Content
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
-                ForEach(vm.searchResults) { item in
-                    ItemView(item: item)
-                        .onTapGesture {
-                            editingItem = item
-                        }
-                }
-            }
+            searchBar
+            searchResults
         }
         .padding(.horizontal)
         .sheet(item: $editingItem) { item in
@@ -56,6 +35,54 @@ struct SearchView_Previews: PreviewProvider {
         NavigationView {
             SearchView(searchText: .constant(""))
                 .environmentObject(sample.vm)
+        }
+    }
+}
+
+extension SearchView {
+    
+    /// Search bar where user types desired search term
+    private var searchBar: some View {
+        VStack {
+            // Search field
+            TextField("Ex. Milk", text: $searchText)
+                .submitLabel(.search)
+                .padding()
+                // Clear search button
+                .overlay(
+                    Image(systemName: "xmark.circle.fill")
+                        .padding()
+                        .foregroundColor(Color.theme.background)
+                        .opacity(searchText.isEmpty ? 0.0 : 1.0)
+                        .onTapGesture {
+                            searchText = ""
+                        }
+                    , alignment: .trailing
+                )
+        }
+        .frame(height: 50)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
+        .padding(.vertical)
+    }
+    
+    /// Results from searching
+    private var searchResults: some View {
+        VStack {
+            // Tells user no items exist
+            if vm.searchResults.isEmpty {
+                Text("No results")
+                    .font(.callout)
+                    .padding()
+            }
+            // Content
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
+                ForEach(vm.searchResults) { item in
+                    ItemView(item: item)
+                        .onTapGesture {
+                            editingItem = item
+                        }
+                }
+            }
         }
     }
 }

@@ -11,13 +11,11 @@ struct ContentView: View {
     
     @EnvironmentObject var vm: ItemViewModel
     
-    @State var showSettings: Bool = false
-    @State var showSearch: Bool = false
-    @State var showRemove: Bool = false
-    @State var showCreate: Bool = false
-    @State var editingItem: Item?
-
-    @State var image: UIImage = UIImage(imageLiteralResourceName: "Dark-Image")
+    @State private var showSettings: Bool = false
+    @State private var showSearch: Bool = false
+    @State private var showRemove: Bool = false
+    @State private var showCreate: Bool = false
+    @State private var editingItem: Item?
     
     var body: some View {
         HStack {
@@ -31,7 +29,7 @@ struct ContentView: View {
         }
         .background(backgroundImage)
         .sheet(isPresented: $showSettings) {
-            SettingsView(image: $image, currentThreshold: vm.threhold)
+            SettingsView(image: vm.backgroundImage, currentThreshold: vm.threhold)
         }
         .sheet(item: $editingItem) { item in
             EditItemView(item: item)
@@ -51,18 +49,20 @@ struct ContentView_Previews: PreviewProvider {
 
 extension ContentView {
     
+    /// Background image of application
     private var backgroundImage: some View {
-        Image(uiImage: image)
+        Image(uiImage: vm.backgroundImage)
             .resizable()
             .scaledToFill()
             .ignoresSafeArea()
     }
     
+    /// Top row of buttons
     private var toolbar: some View {
         HStack {
-            // Settings
+            // Settings Button
             IconButtonView(action: $showSettings, systemName: "gearshape")
-            // Search
+            // Search Button
             NavigationLink(isActive: $showSearch) {
                 SearchView(searchText: $vm.searchText)
                     .navigationTitle("Search Items")
@@ -70,22 +70,23 @@ extension ContentView {
                 IconButtonView(action: $showSearch, systemName: "magnifyingglass")
             }
             Spacer()
-            // Delete Items
+            // Delete Items Button
             NavigationLink(isActive: $showRemove) {
                 DeletionView()
                     .navigationTitle("Delete Items")
             } label: {
                 IconButtonView(action: $showRemove, systemName: "minus")
             }
-            // Create Item
+            // Create Item Button
             IconButtonView(action: $showCreate, systemName: "plus")
         }
         .padding(.top)
     }
     
+    /// Horizontally scrolling list of items below threshold
     private var expiringSoonItems: some View {
         VStack {
-            // Title
+            // Title (Do not show if no items exist)
             if !vm.expiringSoon.isEmpty {
                 HStack {
                     Text("Expiring Soon")
@@ -102,6 +103,7 @@ extension ContentView {
                     HStack {
                         LazyHGrid(rows: [GridItem(.flexible())]) {
                             ForEach(vm.expiringSoon) { item in
+                                // Tap an item to edit it
                                 ItemView(item: item)
                                     .onTapGesture {
                                         editingItem = item
@@ -116,9 +118,10 @@ extension ContentView {
         }
     }
     
+    /// Vertical list of all items
     private var allItems: some View {
         VStack {
-            // Title
+            // Title (Do not show if no items exist)
             if !vm.allItems.isEmpty {
                 HStack {
                     Text("All Items")
@@ -131,6 +134,7 @@ extension ContentView {
             // Content
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
                 ForEach(vm.allItems) { item in
+                    // Tap an item to edit it
                     ItemView(item: item)
                         .onTapGesture {
                             editingItem = item
