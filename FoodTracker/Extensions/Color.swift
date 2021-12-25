@@ -9,8 +9,6 @@ import Foundation
 import SwiftUI
 
 struct ColorTheme {
-    let background = Color("Background")
-    let shadow = Color("Shadow")
     let accent = Color("Accent")
     let text = Color("Text")
     let expiredText = Color("ExpiredText")

@@ -168,7 +168,7 @@ extension SettingsView {
             HStack {
                 Text("Version")
                 Spacer()
-                Text("2.2")
+                Text("2.21")
             }
             HStack {
                 Text("Support")

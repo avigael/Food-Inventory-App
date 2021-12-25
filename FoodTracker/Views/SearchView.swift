@@ -52,7 +52,7 @@ extension SearchView {
                 .overlay(
                     Image(systemName: "xmark.circle.fill")
                         .padding()
-                        .foregroundColor(Color.theme.background)
+                        .foregroundColor(Color.theme.accent)
                         .opacity(searchText.isEmpty ? 0.0 : 1.0)
                         .onTapGesture {
                             searchText = ""

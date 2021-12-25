@@ -96,9 +96,11 @@ extension ContentView {
             Text("Tap + to Add an Item")
                 .fontWeight(.bold)
         }
-        .foregroundColor(Color.theme.text)
-        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
-        .padding(.vertical)
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
+        .padding(.horizontal)
+
     }
     
     /// Horizontally scrolling list of items below threshold
@@ -110,10 +112,10 @@ extension ContentView {
                     Text("Expiring Soon")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundColor(Color.theme.text)
-                        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
                     Spacer()
                 }
+                .padding()
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
                 .padding(.horizontal)
             }
             // Content
@@ -146,11 +148,10 @@ extension ContentView {
                     Text("All Items")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundColor(Color.theme.text)
-                        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
-
                     Spacer()
                 }
+                .padding()
+                .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 15))
             }
             // Content
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 160))]) {
