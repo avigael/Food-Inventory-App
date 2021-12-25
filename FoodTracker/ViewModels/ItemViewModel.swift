@@ -15,7 +15,7 @@ class ItemViewModel: ObservableObject {
     @Published var expiringSoon: [Item] = []
     @Published var searchText: String = ""
     @Published var searchResults: [Item] = []
-    @Published var backgroundImage: UIImage = UIImage(imageLiteralResourceName: "Dark-Image")
+    @Published var backgroundImage: UIImage = UIImage(imageLiteralResourceName: "default-background")
     @Published var threhold: Int
     
     private var cancellables = Set<AnyCancellable>()

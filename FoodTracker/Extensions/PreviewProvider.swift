@@ -35,7 +35,7 @@ class DeveloperPreview {
     /// **item.largeQuantity**
     let item = ItemExamples()
     
-    var image = UIImage(imageLiteralResourceName: "Dark-Image")
+    var image = UIImage(imageLiteralResourceName: "default-background")
     
     let vm = ItemViewModel(items: [
         Item(title: "Animal Cracker Box", quantity: 4, note: "For Sam's school lunch!", expirationDate: Date(timeIntervalSinceNow: 180*24*60*60)),

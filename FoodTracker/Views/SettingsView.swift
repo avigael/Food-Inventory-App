@@ -15,12 +15,11 @@ struct SettingsView: View {
     
     @AppStorage("threshold") private var threshold = 5
     @AppStorage("systemTheme") private var systemTheme = Theme.system
-    // The user can have notifications enabled in settings, but wish not to get notifications
     @AppStorage("allowNotifications") private var allowNotifications = false
     
     @State var image: UIImage
     @State var currentThreshold: Int
-    @State private var notifications = false
+    @State var notificationToggle: Bool
     @State private var showImagePicker = false
     @State private var resetAlert = false
 
@@ -38,15 +37,6 @@ struct SettingsView: View {
                 themeSection
                 backgroundImageSection
                 notificationsSection
-                    .onAppear {
-                        UNUserNotificationCenter.current().getNotificationSettings { settings in
-                            if settings.authorizationStatus == .authorized {
-                                notifications = true
-                            } else {
-                                notifications = false
-                            }
-                        }
-                    }
                 thresholdSection
                 aboutSection
                 resetSettingsSection
@@ -71,7 +61,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(image: sample.image, currentThreshold: 5)
+        SettingsView(image: sample.image, currentThreshold: 5, notificationToggle: false)
             .environmentObject(sample.vm)
     }
 }
@@ -120,18 +110,21 @@ extension SettingsView {
     /// Enables or disables notifications for items
     private var notificationsSection: some View {
         Section {
-            Toggle("Notifications", isOn: $notifications)
-                .onChange(of: notifications) { newValue in
+            Toggle("Notifications", isOn: $notificationToggle)
+                .onChange(of: notificationToggle) { newValue in
                     if newValue {
                         // Ask for permission
                         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
                             if success {
                                 // Changes toggle to true
-                                notifications = true
+                                notificationToggle = true
                                 allowNotifications = true
+                                print("NOTIFICATIONS ALLOWED!")
                             } else {
                                 // If user denies notifications will revert to false
-                                notifications = false
+                                notificationToggle = false
+                                allowNotifications = false
+                                print("NOTIFICATIONS DENIED!")
                             }
                         }
                         // Schedule notifications for all items
@@ -175,7 +168,7 @@ extension SettingsView {
             HStack {
                 Text("Version")
                 Spacer()
-                Text("2.1")
+                Text("2.2")
             }
             HStack {
                 Text("Support")
@@ -198,7 +191,7 @@ extension SettingsView {
                       message: Text("Settings will revert to their default!"),
                       primaryButton: Alert.Button.default(Text("Confirm")) {
                     systemTheme = Theme.system
-                    image = UIImage(imageLiteralResourceName: "Dark-Image")
+                    image = UIImage(imageLiteralResourceName: "default-background")
                     vm.saveBackgroundImage(image: image)
                     vm.updateThreshold(to: 5)
                     threshold = 5

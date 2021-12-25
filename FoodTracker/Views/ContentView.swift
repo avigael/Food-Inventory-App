@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @EnvironmentObject var vm: ItemViewModel
     
+    @AppStorage("allowNotifications") private var allowNotifications = false
+    
     @State private var showSettings: Bool = false
     @State private var showSearch: Bool = false
     @State private var showRemove: Bool = false
@@ -22,6 +24,9 @@ struct ContentView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 toolbar
                     .padding(.horizontal)
+                if vm.allItems.isEmpty {
+                    emptyMessage
+                }
                 expiringSoonItems
                 allItems
                     .padding(.horizontal)
@@ -29,7 +34,7 @@ struct ContentView: View {
         }
         .background(backgroundImage)
         .sheet(isPresented: $showSettings) {
-            SettingsView(image: vm.backgroundImage, currentThreshold: vm.threhold)
+            SettingsView(image: vm.backgroundImage, currentThreshold: vm.threhold, notificationToggle: allowNotifications)
         }
         .sheet(item: $editingItem) { item in
             EditItemView(item: item)
@@ -83,6 +88,19 @@ extension ContentView {
         .padding(.top)
     }
     
+    private var emptyMessage: some View {
+        VStack {
+            Text("No Items")
+                .font(.title)
+                .fontWeight(.bold)
+            Text("Tap + to Add an Item")
+                .fontWeight(.bold)
+        }
+        .foregroundColor(Color.theme.text)
+        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
+        .padding(.vertical)
+    }
+    
     /// Horizontally scrolling list of items below threshold
     private var expiringSoonItems: some View {
         VStack {
@@ -93,6 +111,7 @@ extension ContentView {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(Color.theme.text)
+                        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -128,6 +147,8 @@ extension ContentView {
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(Color.theme.text)
+                        .shadow(color: Color.theme.shadow, radius: 3, x: 0, y: 0)
+
                     Spacer()
                 }
             }

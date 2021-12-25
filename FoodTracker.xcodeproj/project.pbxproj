@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		93043C0A276BF8CC00A45449 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93043C09276BF8CC00A45449 /* PhotoPicker.swift */; };
+		930BF20827744F5B00540B07 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 930BF20727744F5B00540B07 /* SplashScreen.storyboard */; };
 		936D9F8C276A797F005488D8 /* ItemContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F8A276A797F005488D8 /* ItemContainer.xcdatamodeld */; };
 		936D9F8E276A8093005488D8 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F8D276A8093005488D8 /* CoreDataManager.swift */; };
 		936D9F91276A884D005488D8 /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D9F90276A884D005488D8 /* ItemViewModel.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		93043C09276BF8CC00A45449 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		930BF20727744F5B00540B07 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		936D9F8B276A797F005488D8 /* ItemContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ItemContainer.xcdatamodel; sourceTree = "<group>"; };
 		936D9F8D276A8093005488D8 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		936D9F90276A884D005488D8 /* ItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
@@ -68,6 +70,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		930BF2092774500900540B07 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				930BF20727744F5B00540B07 /* SplashScreen.storyboard */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		936D9F89276A7956005488D8 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				93AD4E2F27669A30007C2F02 /* FoodTrackerApp.swift */,
+				930BF2092774500900540B07 /* Splash */,
 				936D9F8F276A883E005488D8 /* ViewModels */,
 				93D809A327692528005A0D56 /* Views */,
 				93AD4E3F2766A942007C2F02 /* Models */,
@@ -235,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				930BF20827744F5B00540B07 /* SplashScreen.storyboard in Resources */,
 				93AD4E3727669A31007C2F02 /* Preview Assets.xcassets in Resources */,
 				93AD4E3427669A31007C2F02 /* Assets.xcassets in Resources */,
 			);
@@ -403,6 +415,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -432,6 +445,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
