@@ -12,6 +12,9 @@ struct AddItemView: View {
     @EnvironmentObject var vm: ItemViewModel
     @Environment(\.dismiss) var dismiss
     
+    @State private var showAlert = false
+    @State private var showScanner = false
+    
     @State private var title: String = ""
     @State private var quantity: String = "1"
     @State private var note: String = ""
@@ -20,20 +23,36 @@ struct AddItemView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                titleSection
-                dateSection
-                quantitySection
-                noteSection
-            }
-            .listStyle(.insetGrouped)
-            .navigationTitle("Add Item")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    createButton
+            if showScanner {
+                BarcodeScanner(label: $title, showScanner: $showScanner, showAlert: $showAlert)
+                .navigationTitle("Scan Barcode")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        cancelCameraButton
+                    }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    cancelButton
+            } else {
+                List {
+                    titleSection
+                    dateSection
+                    quantitySection
+                    noteSection
+                }
+                .listStyle(.insetGrouped)
+                .navigationTitle("Add Item")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        createButton
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        cancelButton
+                    }
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("No Name Found!"),
+                        message: Text("Could not find an item for this barcode.")
+                    )
                 }
             }
         }
@@ -47,11 +66,19 @@ struct AddItemView_Previews: PreviewProvider {
 }
 
 extension AddItemView {
-    
     /// Add title to item
     private var titleSection: some View {
         Section("Title (required)") {
-            TextField("Item Name", text: $title)
+            HStack {
+                TextField("Item Name", text: $title)
+                Image(systemName: "barcode.viewfinder")
+                    .resizable()
+                    .foregroundColor(Color.theme.accent)
+                    .frame(width: 25, height: 25)
+                    .onTapGesture {
+                        showScanner = true
+                    }
+            }
         }
     }
     
@@ -115,6 +142,13 @@ extension AddItemView {
     private var cancelButton: some View {
         Button("Cancel") {
             dismiss()
+        }
+    }
+    
+    /// Closes camera and reverts back to Add Item screen
+    private var cancelCameraButton: some View {
+        Button("Cancel") {
+            showScanner = false
         }
     }
     
