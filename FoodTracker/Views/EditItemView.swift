@@ -70,6 +70,7 @@ extension EditItemView {
     private var titleSection: some View {
         Section("Title (required)") {
             TextField("Item Name", text: $title)
+                .submitLabel(.done)
         }
     }
     

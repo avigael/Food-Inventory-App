@@ -11,7 +11,7 @@ struct AddItemView: View {
     
     @EnvironmentObject var vm: ItemViewModel
     @Environment(\.dismiss) var dismiss
-    
+        
     @State private var showAlert = false
     @State private var showScanner = false
     
@@ -71,6 +71,7 @@ extension AddItemView {
         Section("Title (required)") {
             HStack {
                 TextField("Item Name", text: $title)
+                    .submitLabel(.done)
                 Image(systemName: "barcode.viewfinder")
                     .resizable()
                     .foregroundColor(Color.theme.accent)
